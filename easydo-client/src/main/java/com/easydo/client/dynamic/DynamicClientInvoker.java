@@ -4,13 +4,15 @@ import com.easydo.client.netty.ClientDataContext;
 import com.easydo.common.pojo.Invoker;
 import com.easydo.common.pojo.Result;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.concurrent.CompleteFuture;
 import org.springframework.context.ApplicationContext;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 public class DynamicClientInvoker<T> implements InvocationHandler {
 
@@ -53,23 +55,18 @@ public class DynamicClientInvoker<T> implements InvocationHandler {
             this.invoker.setTimeMsec(10000L);
         }
         Long key = clientDataContext.getKey();
+        CompletableFuture<Result> future = new CompletableFuture<>();
         this.invoker.setKey(key);
         this.invoker.setMethodName(method.getName());
         this.invoker.setParams(args);
         this.invoker.setParameters(method.getParameterTypes());
+        clientDataContext.putResult(key, future);
         // 执行远程调用
         ChannelHandlerContext cxt = this.applicationContext.
                 getBean("channelHandlerContext", ChannelHandlerContext.class);
         cxt.channel().writeAndFlush(this.invoker);
         // 获取返回
-        long now = System.currentTimeMillis();
-        Result result = null;
-        while (now + this.invoker.getTimeMsec() > System.currentTimeMillis()) {
-            result = clientDataContext.getResult(key);
-            if (null != result) {
-                break;
-            }
-        }
+        Result result = future.get(this.invoker.getTimeMsec(), TimeUnit.MILLISECONDS);
         if (result == null) {
             throw new RuntimeException("method timeout ..");
         }

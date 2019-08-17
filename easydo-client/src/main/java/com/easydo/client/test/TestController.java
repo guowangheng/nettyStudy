@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
-    @EasydoReference(retry = 2, timeMsec = 10000)
+    @EasydoReference(retry = 2, timeMsec = 1000)
     private TestService testService;
 
-    @EasydoReference(retry = 3, timeMsec = 10000)
+    @EasydoReference(retry = 3, timeMsec = 1000)
     private UserService userService;
 
     @RequestMapping("/test")

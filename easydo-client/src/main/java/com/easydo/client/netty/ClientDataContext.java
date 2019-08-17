@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -14,15 +15,16 @@ import java.util.concurrent.atomic.AtomicLong;
 @Setter
 @Component
 @Slf4j
-public class ClientDataContext {
+public class ClientDataContext<T> {
 
-    private Map<Long, Result> dataMap = new ConcurrentHashMap<>();
+    private Map<Long, CompletableFuture<T>> dataMap = new ConcurrentHashMap<>();
 
     private AtomicLong dataKey = new AtomicLong(0);
 
-    public Boolean putResult(Long key, Result result) {
+    public Boolean putResult(Long key, CompletableFuture<T> future) {
         try {
-            dataMap.putIfAbsent(key, result);
+            // 第一次存future为空, 直接存就行了, 第二次是要把Future中的Result修改为新的Result
+            dataMap.put(key, future);
             return Boolean.TRUE;
         } catch (Exception e) {
             log.error("put data error..");
@@ -30,7 +32,7 @@ public class ClientDataContext {
         return Boolean.FALSE;
     }
 
-    public Result getResult(Long key) {
+    public CompletableFuture<T> getResult(Long key) {
         return dataMap.get(key);
     }
 

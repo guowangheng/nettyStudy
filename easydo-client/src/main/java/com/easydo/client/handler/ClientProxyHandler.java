@@ -18,8 +18,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Component
 @ChannelHandler.Sharable
@@ -45,8 +45,6 @@ public class ClientProxyHandler extends SimpleChannelInboundHandler<Packager> {
     @Autowired
     private ClientDataContext clientCxt;
 
-    private static final Map<Long, Result> resultMap = new ConcurrentHashMap<>();
-
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         log.info("active..");
@@ -66,9 +64,8 @@ public class ClientProxyHandler extends SimpleChannelInboundHandler<Packager> {
                 // 业务处理
                 log.info("业务处理..");
                 Result result = (Result)packager;
-                if (!clientCxt.putResult(result.getKey(), result)) {
-                    log.error("put data error..");
-                }
+                CompletableFuture future = clientCxt.getResult(result.getKey());
+                future.complete(result);
             } else {
                 log.error("unKnow data received..");
             }

@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.CompletableFuture;
+
 @Getter
 @Setter
 @Component
@@ -16,6 +18,8 @@ public class Result<T> extends Packager {
     private T data;
 
     private Long key;
+
+    private CompletableFuture<Result> completeFuture;
 
     public Result() {
 

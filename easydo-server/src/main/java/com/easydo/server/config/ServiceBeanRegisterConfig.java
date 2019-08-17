@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.beans.factory.support.AbstractBeanDefinition;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
@@ -32,17 +30,6 @@ public class ServiceBeanRegisterConfig implements BeanFactoryPostProcessor {
         Set<BeanDefinition> beanDefinitionSet = provider.findCandidateComponents("com.easydo.*");
         for (BeanDefinition beanDefinition : beanDefinitionSet) {
             if (beanDefinition instanceof AnnotatedBeanDefinition) {
-//                // 获得注解上的参数信息
-//                AnnotatedBeanDefinition definition = (AnnotatedBeanDefinition) beanDefinition;
-//                String beanClassName = definition.getBeanClassName();
-//                Map<String, Object> parameterMap = definition.getMetadata().getAnnotationAttributes(EasydoService.class.getCanonicalName());
-//                BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(EasydoServiceBean.class);
-//                beanDefinitionBuilder.addConstructorArgValue(beanClassName);
-//                beanDefinitionBuilder.addConstructorArgValue(parameterMap);
-//                beanDefinitionBuilder.getBeanDefinition().setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
-//                BeanDefinitionRegistry bdr = (BeanDefinitionRegistry)beanFactory;
-//                bdr.registerBeanDefinition(beanClassName, beanDefinitionBuilder.getBeanDefinition());
-
                 AnnotatedBeanDefinition definition = (AnnotatedBeanDefinition) beanDefinition;
                 String beanClassName = definition.getBeanClassName();
                 GenericBeanDefinition genericBeanDefinition = new GenericBeanDefinition();
