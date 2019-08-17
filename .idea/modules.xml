@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/easydo-client/com-easydo-server.iml" filepath="$PROJECT_DIR$/easydo-client/com-easydo-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/easydo-client/easydo-client.iml" filepath="$PROJECT_DIR$/easydo-client/easydo-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/easydo-common/easydo-common.iml" filepath="$PROJECT_DIR$/easydo-common/easydo-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/easydo-parent/easydo-parent.iml" filepath="$PROJECT_DIR$/easydo-parent/easydo-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/easydo-server/easydo-server.iml" filepath="$PROJECT_DIR$/easydo-server/easydo-server.iml" />
+    </modules>
+  </component>
+</project>
